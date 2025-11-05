@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {//implements View.OnClickLi
             public void onClick(View v) {
                 britness += 0.1;
                 findViewById(R.id.dog).setAlpha(britness);
+                Toast.makeText(MainActivity.this, "brightest", Toast.LENGTH_SHORT).show();
             }
         });
         btn2 = findViewById(R.id.btn2);
