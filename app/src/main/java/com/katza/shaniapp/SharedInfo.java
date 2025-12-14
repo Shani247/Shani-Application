@@ -18,6 +18,7 @@ public class SharedInfo extends AppCompatActivity {
 
     SharedPreferences sp;
     Button btnSave;
+    Button showNetonim;
     EditText etFname, etLname;
     TextView tvDisplay;
     View v;
@@ -37,8 +38,12 @@ public class SharedInfo extends AppCompatActivity {
     }
 
     private void initViews() {
+        etFname = findViewById(R.id.etFname);
+        etLname = findViewById(R.id.etLname);
+        tvDisplay = findViewById(R.id.tvDisplay);
+        sp = getSharedPreferences("details1", 0);
         btnSave = findViewById(R.id.btnSubmit);
-        btnSave.setOnClickListener(new View.OnClickListener() { // כפתור להגדלת בהירות התמונה
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (btnSave == v) {
@@ -49,15 +54,19 @@ public class SharedInfo extends AppCompatActivity {
                 }
             }
         });
-        etFname = findViewById(R.id.etFname);
-        etLname = findViewById(R.id.etLname);
-        tvDisplay = findViewById(R.id.tvDisplay);
-        sp = getSharedPreferences("details1", 0);
-        String strFname = sp.getString("fname", null);
-        String strLname = sp.getString("lname", null);
-        if (strFname != null && strLname != null) {
-            tvDisplay.setText("Hey " + strFname + " " + strLname);
+
+        showNetonim = findViewById(R.id.shlifaNetoonim);
+        showNetonim.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                String strFname = sp.getString("fname", null);
+                String strLname = sp.getString("lname", null);
+                if (strFname != null && strLname != null) {
+                    tvDisplay.setText("Hey " + strFname + " " + strLname);
+                }
+            }
+        });
         }
-    }
 }
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ public class CustomDialog extends AppCompatActivity {
     SharedPreferences sp;
     Dialog d;
 
+    Button shlifaNetoonim;
     EditText etUserName, etPass;
     Button btnCustomLogin, btnLogin;
 
@@ -34,7 +36,8 @@ public class CustomDialog extends AppCompatActivity {
         initViews();
     }
     private void initViews() {
-        btnLogin = (Button)findViewById(R.id.btnLogin);
+        shlifaNetoonim = findViewById(R.id.shlifaNetoonim);
+        btnLogin = findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,6 +46,14 @@ public class CustomDialog extends AppCompatActivity {
 
         });
         sp = getSharedPreferences("details1", 0);
+        shlifaNetoonim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String user = etUserName.getText().toString();
+                String pass = etPass.getText().toString();
+                Toast.makeText(CustomDialog.this, "user - " + user + " pass - " + pass, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void createLoginDialog()
@@ -66,6 +77,17 @@ public class CustomDialog extends AppCompatActivity {
             public void onClick(View v) {
                 String user = etUserName.getText().toString();
                 String pass = etPass.getText().toString();
+                SharedPreferences.Editor editor = sp.edit();
+
+                // שמירת הנתונים
+                editor.putString("username", user);
+                editor.putString("password", pass);
+
+                // אישור השמירה
+                editor.apply();
+
+                // הודעה למשתמש
+                Toast.makeText(CustomDialog.this, "הנתונים נשמרו", Toast.LENGTH_SHORT).show();
                 d.dismiss(); // סוגר את הדיאלוג אחרי הלחיצה
             }
         });
