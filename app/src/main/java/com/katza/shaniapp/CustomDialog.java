@@ -14,7 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class CustomDialog extends AppCompatActivity {
+public class CustomDialog extends BaseActivity {
 
     SharedPreferences sp;
     Dialog d;

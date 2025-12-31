@@ -13,7 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class DynamicActivity extends AppCompatActivity {
+public class DynamicActivity extends BaseActivity {
 
     LinearLayout lin, lin1, sideLin;
     ImageView im, in;

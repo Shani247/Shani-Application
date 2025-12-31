@@ -15,7 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {//implements View.OnClickListener
+public class MainActivity extends BaseActivity {//implements View.OnClickListener
     Button btn1;
     Button btn2;
     Button submit;
