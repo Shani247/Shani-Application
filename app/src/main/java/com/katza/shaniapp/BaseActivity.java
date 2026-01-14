@@ -32,7 +32,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             // אם המשתמש לחץ על פריט עם ID בשם action_login
             Intent intent = new Intent(this, CustomDialog.class);
             startActivity(intent);
-            //finish();
             return true;
             // מחזיר true כדי לאותת ל-Android שהאירוע טופל.
         }
@@ -47,6 +46,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         else if (id == R.id.action_profile) {
             Intent intent = new Intent(this, SharedInfo.class);
             startActivity(intent);
+            Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
             //finish();
             return true;
         }
@@ -61,6 +61,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             // אם המשתמש לחץ על פריט עם ID בשם action_exit
             finishAffinity();
             // סוגר את כל ה-Activities של האפליקציה (effectively "Exit App")
+            return true;
+        }
+        else if (id == R.id.action_data) {
+            // אם המשתמש לחץ על פריט עם ID בשם action_register
+            Intent intent = new Intent(this, ShowDataActivity.class);
+            startActivity(intent);
+            //finish();
             return true;
         }
 

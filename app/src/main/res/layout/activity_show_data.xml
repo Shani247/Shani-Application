@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:layout_margin="8dp"
+        android:clipToPadding="false">
+
+        <!-- כותרת -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="פרטי המשתמש"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#6200EE"
+            android:layout_marginBottom="24dp"
+            android:layout_gravity="center"/>
+
+        <!-- שם משתמש -->
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- סיסמה -->
+        <TextView
+            android:id="@+id/tvPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- מין -->
+        <TextView
+            android:id="@+id/tvGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- גיל -->
+        <TextView
+            android:id="@+id/tvAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- כפתור חזרה לעריכת פרטים -->
+        <Button
+            android:id="@+id/btnEditData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="חזור"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#6200EE"
+            android:padding="12dp"/>
+
+
+        <!-- EditText לשנת לידה -->
+        <EditText
+            android:id="@+id/etBirthYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="הכנס שנת לידה"
+            android:inputType="number"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- כפתור לחשב גיל -->
+        <Button
+            android:id="@+id/btnCalculateAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="חשב גיל"
+            android:textColor="@android:color/white"
+            android:backgroundTint="#6200EE"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp"/>
+
+
+    </LinearLayout>
+</ScrollView>

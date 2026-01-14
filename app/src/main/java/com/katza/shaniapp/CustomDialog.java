@@ -1,97 +1,162 @@
 package com.katza.shaniapp;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.util.Calendar;
 
 public class CustomDialog extends BaseActivity {
 
     SharedPreferences sp;
     Dialog d;
 
-    Button shlifaNetoonim;
-    EditText etUserName, etPass;
-    Button btnCustomLogin, btnLogin;
+    Button shlifaNetoonim, btnLogin;
+    EditText etUserName, etPass, etAge, etBirthYear;
+    Button btnCustomLogin;
+    RadioGroup rgGender;
+
+    // ActivityResultLauncher אם נרצה בעתיד
+    private ActivityResultLauncher<Intent> ageLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data!=null)
+                        {
+
+                            int age = data.getIntExtra("age",111);
+                            etAge.setText(String.valueOf(age));
+                            Toast.makeText(CustomDialog.this, "הגיל שחושב: " + age, Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(CustomDialog.this, "אנא הכנס/י שנת לידה", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_custom_dialog);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         initViews();
     }
+
     private void initViews() {
         shlifaNetoonim = findViewById(R.id.shlifaNetoonim);
         btnLogin = findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createLoginDialog();
-            }
 
-        });
         sp = getSharedPreferences("details1", 0);
-        shlifaNetoonim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+
+        btnLogin.setOnClickListener(v -> createLoginDialog());
+
+        shlifaNetoonim.setOnClickListener(v -> {
+            if (d != null && etUserName != null && etPass != null && rgGender != null) {
                 String user = etUserName.getText().toString();
                 String pass = etPass.getText().toString();
-                Toast.makeText(CustomDialog.this, "user - " + user + " pass - " + pass, Toast.LENGTH_SHORT).show();
+
+                String gender = "";
+                int selectedId = rgGender.getCheckedRadioButtonId();
+                if (selectedId != -1) {
+                    RadioButton selected = d.findViewById(selectedId);
+                    gender = selected.getText().toString();
+                }
+
+                String ageStr = etAge.getText().toString();
+
+                Toast.makeText(CustomDialog.this,
+                        "user: " + user + "\npass: " + pass + "\ngender: " + gender + "\nage: " + ageStr,
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void createLoginDialog()
-    {
+    public void createLoginDialog() {
         d = new Dialog(this);
-
         d.setContentView(R.layout.customdialog);
-
         d.setTitle("Login");
-
         d.setCancelable(true);
 
         etUserName = d.findViewById(R.id.etUserName);
-
         etPass = d.findViewById(R.id.etPassword);
-
+        rgGender = d.findViewById(R.id.rgGender);
+        etAge = d.findViewById(R.id.etAge);
+        etBirthYear = d.findViewById(R.id.etBirthYear);
         btnCustomLogin = d.findViewById(R.id.btnDialogLogin);
 
+        //Result #2
+        Button btnCalculateAge = d.findViewById(R.id.btnCalculateAge);
+        btnCalculateAge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CustomDialog.this,ShowDataActivity.class);
+                ageLauncher.launch(intent);
+            }
+        });
+
+        //NO Result #1
         btnCustomLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String user = etUserName.getText().toString();
                 String pass = etPass.getText().toString();
-                SharedPreferences.Editor editor = sp.edit();
 
-                // שמירת הנתונים
+                String gender = "";
+                int selectedId = rgGender.getCheckedRadioButtonId();
+                if (selectedId != -1) {
+                    RadioButton selected = d.findViewById(selectedId);
+                    gender = selected.getText().toString();
+                }
+
+
+                // שמירת הנתונים ב-SharedPreferences
+                SharedPreferences.Editor editor = sp.edit();
                 editor.putString("username", user);
                 editor.putString("password", pass);
-
-                // אישור השמירה
+                editor.putBoolean("gender", false);
+                editor.putInt("age", 12);
                 editor.apply();
 
-                // הודעה למשתמש
+                // שליחה ל-ShowData
+                Intent intent = new Intent(CustomDialog.this, ShowDataActivity.class);
+                intent.putExtra("username", user);
+                intent.putExtra("password", pass);
+                intent.putExtra("gender", false);
+                intent.putExtra("age", 12);
+                startActivity(intent);
+
                 Toast.makeText(CustomDialog.this, "הנתונים נשמרו", Toast.LENGTH_SHORT).show();
-                d.dismiss(); // סוגר את הדיאלוג אחרי הלחיצה
+                d.dismiss();
             }
         });
+
         d.show();
     }
 }
-
