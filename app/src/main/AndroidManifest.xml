@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,16 +17,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShaniApp">
         <activity
-            android:name=".IntentFilterActivity"
+            android:name=".CameraActivity"
             android:exported="true">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
+                <intent-filter>
+                    <action android:name="android.intent.action.MAIN" />
+                    <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
         </activity>
 
+        <activity
+            android:name=".IntentFilterActivity"
+            android:exported="false"/>
         <activity
             android:name=".ShowDataActivity"
             android:exported="false" />
@@ -30,11 +36,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.example.ACTION_OPEN_SCREEN_TYPE_B" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".CustomDialog"
             android:exported="false" />
@@ -47,15 +52,12 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="com.example.ACTION_OPEN_SCREEN_TYPE_A" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
-
-
     </application>
 
 </manifest>

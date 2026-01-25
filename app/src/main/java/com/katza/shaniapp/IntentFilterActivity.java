@@ -25,6 +25,8 @@ public class IntentFilterActivity extends AppCompatActivity {
             return insets;
         });
 
+        initViews();
+
     }
 
     private void initViews() {
