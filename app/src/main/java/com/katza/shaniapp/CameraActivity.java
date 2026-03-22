@@ -7,6 +7,12 @@ import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.ImageView;
 
+// 🔹 הוספה - imports להרשאות
+import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -16,11 +22,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends BaseActivity {
 
     ImageView imageView;
     Button btnCamera;
     ActivityResultLauncher<Intent> cameraLauncher;
+
+    // 🔹 הוספה - קוד בקשת הרשאה
+    private static final int CAMERA_PERMISSION_CODE = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,47 +44,71 @@ public class CameraActivity extends AppCompatActivity {
 
         initview();
 
-        // אתחול של ActivityResultLauncher שמפעיל Intent ומקבל תוצאה
+        // 🔹 הוספה - בדיקת הרשאה בזמן ריצה
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_CODE);
+        }
+
         cameraLauncher =
                 registerForActivityResult(
-
-                        // קובע שה-Launcher מיועד להפעלת Activity חיצוני
-                        // ולקבלת תוצאה ממנו (כמו מצלמה)
                         new ActivityResultContracts.StartActivityForResult(),
-
-                        // פונקציה שתופעל לאחר סיום פעילות המצלמה
                         result -> {
-
-                            // בדיקה האם הפעולה הסתיימה בהצלחה
                             if (result.getResultCode() == RESULT_OK) {
 
-                                // קבלת ה-Intent שחזר מהמצלמה
                                 Intent data = result.getData();
 
-                                // בדיקה שה-Intent והנתונים הנוספים אינם ריקים
                                 if (data != null && data.getExtras() != null) {
 
-                                    // שליפת התמונה שצולמה בפורמט Bitmap
-                                    // (תמונה קטנה - thumbnail)
                                     Bitmap bitmap =
                                             (Bitmap) data.getExtras().get("data");
 
-                                    // הצגת התמונה בתוך ImageView על המסך
                                     imageView.setImageBitmap(bitmap);
                                 }
                             }
                         }
                 );
     }
+
     private void initview()
     {
         imageView = findViewById(R.id.imageView);
         btnCamera = findViewById(R.id.btnCamera);
 
         btnCamera.setOnClickListener(v -> {
-            Intent intent =
-                    new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            cameraLauncher.launch(intent);
+
+            // 🔹 הוספה - בדיקה לפני פתיחת מצלמה
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_GRANTED) {
+
+                Intent intent =
+                        new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraLauncher.launch(intent);
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA},
+                        CAMERA_PERMISSION_CODE);
+            }
         });
+    }
+
+    // 🔹 הוספה - טיפול בתשובת המשתמש
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                // יש הרשאה
+            } else {
+                // אין הרשאה
+            }
+        }
     }
 }
